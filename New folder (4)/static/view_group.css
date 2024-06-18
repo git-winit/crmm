@@ -1,0 +1,213 @@
+/* Import Google font - Poppins */
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: width 0.5s; /* Ensure width transition is smooth */
+    padding-top: 0;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 270px; /* Match initial sidebar width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.jumbotron {
+    padding: 20px;
+    background-color:  #7ebcf9;
+    border-radius: 5px;
+    margin-top: 40px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 3px solid rgb(10, 20, 59);
+}
+
+.card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid rgb(2, 51, 251);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.875rem;
+    color: #555;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav p {
+        font-size: large;
+    }
+
+    nav a {
+        font-size: medium;
+        padding: 8px;
+    }
+
+    nav a i {
+        margin-right: 4px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links a {
+        margin: 10px 0;
+    }
+
+    .content {
+        margin-top: 120px;
+        /* Adjust this if needed to avoid content being hidden behind the nav */
+        padding: 10px;
+    }
+
+    .jumbotron {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav p {
+        font-size: medium;
+    }
+
+    nav a {
+        font-size: small;
+        padding: 6px;
+    }
+
+    nav a i {
+        margin-right: 2px;
+    }
+
+    .nav-links a {
+        margin: 5px 0;
+    }
+
+    .content {
+        margin-top: 140px;
+        /* Adjust this if needed to avoid content being hidden behind the nav */
+        padding: 5px;
+    }
+
+    .jumbotron {
+        padding: 10px;
+    }
+}

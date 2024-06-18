@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='userhome.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usercalender.css') }}">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background-image: url(/static/images/bg.png);
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 270px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: black;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .sidebar-text {
+            flex-grow: 1;
+        }
+
+        #lockIcon {
+            cursor: pointer;
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: large;
+            color: rgb(255, 255, 255);
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar a.logout {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed a {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .sidebar.collapsed a .menu-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-text,
+        .sidebar.collapsed .sidebar-logo {
+            display: none;
+        }
+
+        .sidebar.collapsed #lockIcon {
+            display: none;
+        }
+
+        #main {
+            transition: margin-left 0.5s;
+            padding: 20px;
+            margin-left: 290px;
+            width: calc(100% - 290px);
+        }
+
+        #main.sidebar-collapsed {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed .sidebar-logo {
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: auto;
+        }
+
+        .sidebar.collapsed .sidebar-header {
+            justify-content: center;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        .wide-card {
+            flex: 1 1 100%;
+        }
+
+        .task-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-card,
+        .basic-info-card,
+        .onboarding-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .profile-card {
+            flex: 1 1 100%;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .profile-card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .calendar,
+        .events {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        .basic-info-card,
+        .onboarding-card {
+            margin-top: 20px;
+            
+        }
+        table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f1f1f1;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+img {
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.task-title {
+    font-weight: bold;
+}
+
+.assigned-to, .status, .task-date, .task-team, .observer {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.status {
+    text-transform: capitalize;
+}
+
+.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.observer {
+    display: flex;
+    align-items: center;
+}
+
+.observer img {
+    margin-right: 5px;
+}
+    </style>
+</head>
+
+<body>
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('userhome') }}"><i class="fas fa-tachometer-alt"></i> <span class="menu-text">Dashboard</span></a>
+        <a href="#" onclick="showtaskPage()"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="#" onclick="eventPage()"><i class="fas fa-calendar-alt"></i> <span class="menu-text">Calendar</span></a>
+        <a href="{{ url_for('feed') }}"><i class="fas fa-bell-o"></i> <span class="menu-text">Feed</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">Logout</span></a>
+    </div>
+
+    <div id="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="profile-card">
+                        <img src="/static/images/profile-pic.png" alt="Profile Picture">
+                        <div class="profile-details">
+                            <h5 class="card-title">Helen Voizhicki <span class="badge badge-success">Active</span></h5>
+                            <p><strong>Role:</strong> User</p>
+                            <p><strong>Position:</strong> Head of HR Department</p>
+                            <p><strong>Email:</strong> helenvoizhicki@gmail.com</p>
+                            <p><strong>Phone:</strong> +47 (091) 255 84 43</p>
+                            <p><strong>Company:</strong> LoremIpsum Group</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-flex flex-wrap">
+                    <div class="calendar mr-3">
+                        <h5 class="card-title">Calendar</h5>
+                        <p>Calendar content goes here</p>
+                    </div>
+                    <div class="calendar">
+                        <h5 class="card-title">Notes</h5>
+                        <p>Notes content goes here</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="basic-info-card">
+                        {% if assigned_tasks %}
+                        <h3 style="color: rgb(7, 20, 32);">Tasks Assigned to You</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Observer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task, observer_name in assigned_tasks %}
+                                <tr>
+                                    <td><span class="task-title">{{ task.title }}</span></td>
+                                    <td class="status">{{ task.status }}</td>
+                                    <td>{{ task.startdate.strftime('%d-%m-%Y') }}</td>
+                                    <td>{{ task.enddate.strftime('%d-%m-%Y') }}</td>
+                                    <td class="observer">
+                                        {% if task.observer %}
+                                        <img src="{{ url_for('static', filename='profile_pics/' + (task.observer.profile_picture if task.observer.profile_picture else 'default.png')) }}"
+                                            alt="{{ task.observer.name }}" class="profile-pic">
+                                        {{ observer_name }}
+                                        {% else %}
+                                        None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p>No tasks assigned to you.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+    </script>
+</body>
+</html>

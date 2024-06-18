@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background-image: url(/static/images/bg.png);
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 270px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: black;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .sidebar-text {
+            flex-grow: 1;
+        }
+
+        #lockIcon {
+            cursor: pointer;
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: large;
+            color: rgb(255, 255, 255);
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar a.logout {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed a {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .sidebar.collapsed a .menu-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-text,
+        .sidebar.collapsed .sidebar-logo {
+            display: none;
+        }
+
+        .sidebar.collapsed #lockIcon {
+            display: none;
+        }
+
+        #main {
+            transition: margin-left 0.5s;
+            padding: 20px;
+            margin-left: 250px;
+        }
+
+        #main.sidebar-collapsed {
+            margin-left: 60px;
+        }
+
+        .content {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 1200px;
+            background-image: url(/static/images/bg.png);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .iframe-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            color: #333;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .iframe-close-btn:hover {
+            color: red;
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .employee-info-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 450px;
+            border: 3px solid #1c39bb;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .employee-info-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            border-radius: 5px;
+            border: 3px solid #1c39bb;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .employee-info {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .employee-info div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .employee-info h3, .employee-info p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .employee-info h3 {
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .employee-info p {
+            color: #666;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.333% - 20px);
+            box-sizing: border-box;
+            border: 3px solid #1c39bb;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .group-card, .table-container {
+            width: 100%;
+        }
+
+        .group-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 5px;
+            flex: 1 1 calc(30% - 10px);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #5567fd;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .attendance-card {
+            background-color: #dce8fc;
+            padding: 20px;
+            
+            margin-top: 20px;
+        }
+        .employee-profile {
+            display: flex;
+            align-items: center;
+            background-color: #324da1;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        .employee-profile img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        .employee-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            background-color: white;
+            padding: 10px;
+        }
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        .days {
+            background-color: #d1d8e0;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            
+            
+        }
+        .day-card {
+            background-color: #151b54;
+            color: white;
+            padding: 10px;
+            
+            width: 15%;
+            height:20%;
+            margin-left: 3px;
+        }
+        .late-badge {
+            background-color: #ffa500;
+            color: white;
+            padding: 5px;
+            
+        }
+        .on-time-badge {
+            background-color: #00c851;
+            color: white;
+            padding: 5px;
+           
+        }
+        .absent-badge {
+            background-color: #ff4444;
+            color: white;
+            padding: 5px;
+            
+        }
+        .average-times {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .average-time {
+            text-align: center;
+        }
+        .month-select {
+            margin-left: auto;
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('admin') }}"><i class="fas fa-tachometer-alt"></i> <span class="menu-text">Dashboard</span></a>
+        <a href="{{ url_for('admintasklist') }}"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="{{ url_for('employee_list') }}"><i class="fas fa-user"></i> <span class="menu-text">Employee</span></a>
+        <a href="{{ url_for('admincalender') }}"><i class="fas fa-calendar-check"></i><span class="menu-text">Calender</span></a>
+        <a href="{{ url_for('list_group') }}"><i class="fas fa-users"></i> <span class="menu-text">Groups</span></a>
+        <a href="{{ url_for('attendance_list') }}"><i class="fas fa-list"></i> <span class="menu-text">Attendance</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">Logout</span></a>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main" class="content">
+        <h2 class="header">Employee Details</h2>
+
+        <!-- Profile and Employee Info Container -->
+        <div class="profile-container">
+            <!-- Employee Info Card -->
+            <div class="employee-info-card">
+                {% if employee.profile_picture %}
+                    <img src="{{ url_for('static', filename='profile_pics/' ~ employee.profile_picture) }}" alt="Profile Picture" class="profile-picture">
+                {% else %}
+                    <img src="{{ url_for('static', filename='profile_pics/default.png') }}" alt="Default Profile Picture" class="avatar-md img-thumbnail rounded-circle">
+                {% endif %}
+                <div class="employee-info">
+                    <div><h3>ID:</h3><p>{{ employee.id }}</p></div>
+                    <div><h3>Username:</h3><p>{{ employee.username }}</p></div>
+                    <div><h3>Name:</h3><p>{{ employee.name }}</p></div>
+                    <div><h3>Email:</h3><p>{{ employee.email }}</p></div>
+                    <div><h3>Position:</h3><p>{{ employee.position }}</p></div>
+                    <div><h3>Joining Date:</h3><p>{{ employee.joining_date }}</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Container -->
+        <div class="card-container">
+            <!-- Groups Card -->
+            <div class="card">
+                <h3>Groups</h3>
+                <div class="group-card">
+                    {% for group in employee.groups %}
+                        <div class="group-item">{{ group.name }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Tasks Assigned Card -->
+            <div class="card">
+                <h3>Tasks Assigned</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for task in employee.assigned_tasks %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tasks Observed Card -->
+            <div class="card">
+                <h3>Tasks Observed</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for task in employee.observed_tasks %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Card -->
+        <div class="attendance-card">
+            <div class="employee-profile">
+                <h1>Attendance Card</h1>
+                <div class="month-select">
+                    <label for="month">Select Month:</label>
+                    <select id="month" name="month" onchange="location = this.value;">
+                        <option value="?month=January">January</option>
+                        <option value="?month=February">February</option>
+                        <option value="?month=March">March</option>
+                        <option value="?month=April">April</option>
+                        <option value="?month=May">May</option>
+                        <option value="?month=June">June</option>
+                        <option value="?month=July">July</option>
+                        <option value="?month=August">August</option>
+                        <option value="?month=September">September</option>
+                        <option value="?month=October">October</option>
+                        <option value="?month=November">November</option>
+                        <option value="?month=December">December</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="stats-container">
+                <div class="stat">
+                    <h4>Total Attendance</h4>
+                    <p>{{ total_attendance }} days</p>
+                </div>
+                <div class="stat">
+                    <h4>Total Hours</h4>
+                    <p>{{ total_hours }} hours</p>
+                </div>
+                <div class="stat">
+                    <h4>Avg Check In</h4>
+                    <p>{{ avg_check_in }}</p>
+                </div>
+                <div class="stat">
+                    <h4>Avg Check Out</h4>
+                    <p>{{ avg_check_out }}</p>
+                </div>
+                <div class="stat">
+                    <h4>On Time</h4>
+                    <p>{{ on_time_percentage }}%</p>
+                </div>
+                <div class="stat">
+                    <h4>Late</h4>
+                    <p>{{ late_percentage }}%</p>
+                </div>
+                <div class="stat">
+                    <h4>Absent</h4>
+                    <p>{{ absent_percentage }}%</p>
+                </div>
+            </div>
+            <div class="days">
+                {% for entry in time_entries %}
+                    <div class="day-card">
+                        <h4>{{ entry.date.strftime('%a, %b %d, %Y') }}</h4>
+                        <p style="font-size: small;">Check In: {{ entry.clock_in.strftime('%I:%M %p') if entry.clock_in else 'N/A' }}</p>
+                        <p style="font-size: small;">Check Out: {{ entry.clock_out.strftime('%I:%M %p') if entry.clock_out else 'N/A' }}</p>
+                        <p style="font-size: small;">Total: {{ entry.total_hours }} hr</p>
+                        <p style="font-size: small;">Notes: I Love Digifalx</p>
+                        <span class="badge {{ 'on-time-badge' if entry.total_hours == 1 else 'late-badge' if entry.total_hours < 1 else 'absent-badge' }}">{{ 'On Time' if entry.total_hours == 8 else 'Late' if entry.total_hours < 8 else 'Absent' }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    
+    <script>
+        function closeSlidePage(id) {
+            var iframe = parent.document.getElementById(id);
+            if (iframe) {
+                iframe.style.display = 'none';
+            }
+        }
+
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+    </script>
+</body>
+</html>

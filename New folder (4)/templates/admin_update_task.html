@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            background-image: url(/static/images/bg.png);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            /* Updated font for better readability */
+            transition: margin-left 0.5s;
+            padding-left: 20%;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 270px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            /* Darker background */
+            overflow-x: hidden;
+            transition: width 0.5s;
+            /* Smooth transition */
+            padding-top: 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .sidebar-text {
+            flex-grow: 1;
+        }
+
+        #lockIcon {
+            cursor: pointer;
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            /* Increased font size */
+            color: white;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar a.logout {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed a {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .sidebar.collapsed a .menu-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-text,
+        .sidebar.collapsed .sidebar-logo {
+            display: none;
+        }
+
+        .sidebar.collapsed #lockIcon {
+            display: none;
+        }
+
+        #main {
+            transition: margin-left 0.5s;
+            padding: 20px;
+            margin-left: 270px;
+            /* Updated for better spacing */
+        }
+
+        #main.sidebar-collapsed {
+            margin-left: 60px;
+        }
+
+        .sidebar.collapsed .sidebar-logo {
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: auto;
+        }
+
+        .sidebar.collapsed .sidebar-header {
+            justify-content: center;
+        }
+
+        .form-container {
+            background-color: rgb(132, 181, 254);
+            padding-left: 40px;
+            padding-right: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding-bottom: 7px;
+            width: 70%;
+            margin-top: 2px;
+            margin-bottom: 5px;
+            text-align: center;
+            
+        }
+
+        form {
+            margin-bottom: 5px;
+            background: #ffffff;
+            color: rgb(6, 8, 49);
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 5px;
+            width: 100%;
+            margin-bottom: 7px;
+            padding-bottom: 3px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select,
+        button {
+            display: block;
+            width: 90%;
+            /* Changed to full width for better alignment */
+            
+            
+            font-size: 18px;
+            
+            margin-left: auto;
+            margin-right: auto;
+            
+            border-radius: 3px;
+            border: 2px solid #060c31;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #051130;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 18px;
+            width: 90%;
+        }
+        .instructions {
+            width: 100%;
+            text-align: center;
+        }
+
+        .dropdown-container,
+        .instructions {
+            width: 90%;
+            /* Adjusted width */
+            margin: 20px auto 0;
+            font-size: 14px;
+            font-family: sans-serif;
+            overflow: auto;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .dropdown-button {
+            float: left;
+            width: 80%;
+            background: whitesmoke;
+            padding: 10px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            box-sizing: border-box;
+            margin-left: 60px;
+            height: 50px;
+            border: 2px solid #060c31;
+        }
+
+        .dropdown-label,
+        .dropdown-quantity {
+            float: left;
+        }
+
+        .dropdown-quantity {
+            margin-left: 4px;
+        }
+
+        .fa-filter {
+            float: right;
+        }
+
+        .dropdown-list {
+            float: left;
+            width: 100%;
+            border: 1px solid lightgray;
+            border-top: none;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            display: none;
+        }
+
+        .dropdown-list.visible {
+            display: block;
+        }
+
+        .dropdown-list input[type="search"] {
+            padding: 5px 0;
+        }
+
+        .dropdown-list ul {
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-list input[type="checkbox"] {
+            position: relative;
+            top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('admin') }}"><i class="fas fa-tachometer-alt"></i> <span
+                class="menu-text">Dashboard</span></a>
+        <a href="{{ url_for('admintasklist') }}"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="{{ url_for('employee_list') }}"><i class="fas fa-user"></i> <span class="menu-text">Employee</span></a>
+        <a href="{{ url_for('admincalender') }}"><i class="fas fa-calendar-check"></i><span
+                class="menu-text">Calender</span></a>
+        <a href="{{ url_for('list_group') }}"><i class="fas fa-users"></i> <span class="menu-text">Groups</span></a>
+        <a href="{{ url_for('attendance_list') }}"><i class="fas fa-list"></i> <span
+                class="menu-text">Attendance</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span
+                class="menu-text">Logout</span></a>
+    </div>
+
+
+
+    <div id="main" class="collapsed-main">
+        <div class="content">
+
+            <div class="form-container">
+                <h2 style="font-size: large;">Update Task</h2>
+                <form method="POST">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required value="{{ task.title }}">
+                    <br>
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required>{{ task.description }}</textarea>
+                    <br>
+                    <label for="startdate">Start Date:</label>
+                    <input type="date" id="startdate" name="startdate" required value="{{ task.startdate }}">
+                    <br>
+                    <label for="enddate">End Date:</label>
+                    <input type="date" id="enddate" name="enddate" required value="{{ task.enddate }}">
+                    <br>
+                    <label for="assignees">Assignees:</label>
+                    <div class="dropdown-container noselect">
+                        <div class="dropdown-button">
+                            <span class="dropdown-label">Select Assignees</span>
+                            <span class="dropdown-quantity"></span>
+                            <i class="fa fa-filter"></i>
+                        </div>
+                        <div class="dropdown-list">
+                            <input type="search" placeholder="Search" class="dropdown-search" />
+                            <ul>
+                                {% for employee in employees %}
+                                <li>
+                                    <label>
+                                        <input type="checkbox" value="{{ employee.id }}" name="assignees" {% if
+                                            employee.id in current_assignee_ids %}checked{% endif %} />
+                                        {{ employee.name }}
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <br>
+                    <label for="observer_id">Observer:</label>
+                    <select id="observer_id" name="observer_id" required value="{{task.observer_id}}">
+                        {% for employee in employees %}
+                        <option value="{{ employee.id }}" {% if task.observer_id==employee.id %}selected{% endif %}>{{
+                            employee.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+
+                    <input type="hidden" id="created_by" name="created_by" required value="{{ task.created_by }}">
+                    <br>
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required value="{{task.status}}">
+                        <option value="new start">New Start</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="complete">Complete</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="checkbox" id="summary_checkbox" onclick="toggleSummary()"> Add Summary
+                    </label>
+                    <br>
+                    <div id="summary_div" style="display: none;">
+                        <label for="summary">Summary:</label>
+                        <textarea id="summary" name="summary"></textarea>
+                    </div>
+                    <br>
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+
+
+        function toggleSummary() {
+            var checkbox = document.getElementById("summary_checkbox");
+            var summaryDiv = document.getElementById("summary_div");
+            if (checkbox.checked) {
+                summaryDiv.style.display = "block";
+            } else {
+                summaryDiv.style.display = "none";
+            }
+        }
+
+        const dropdownContainers = document.querySelectorAll('.dropdown-container');
+
+        dropdownContainers.forEach(container => {
+            const dropdownButton = container.querySelector('.dropdown-button');
+            const dropdownList = container.querySelector('.dropdown-list');
+            const dropdownLabel = container.querySelector('.dropdown-label');
+            const dropdownQuantity = container.querySelector('.dropdown-quantity');
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            const searchInput = container.querySelector('.dropdown-search');
+
+            dropdownButton.addEventListener('click', () => {
+                dropdownList.classList.toggle('visible');
+            });
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    const selected = container.querySelectorAll('input[type="checkbox"]:checked').length;
+                    dropdownQuantity.textContent = selected > 0 ? `(${selected})` : '';
+                });
+            });
+
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                checkboxes.forEach(checkbox => {
+                    const label = checkbox.parentElement;
+                    const text = label.textContent.toLowerCase();
+                    label.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.dropdown-container')) {
+                dropdownContainers.forEach(container => {
+                    container.querySelector('.dropdown-list').classList.remove('visible');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

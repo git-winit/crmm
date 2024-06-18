@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Task List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admintasklist.css') }}">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('admin') }}"><i class="fas fa-tachometer-alt"></i> <span
+                class="menu-text">Dashboard</span></a>
+        <a href="{{ url_for('admintasklist') }}"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="{{ url_for('employee_list') }}"><i class="fas fa-user"></i> <span class="menu-text">Employee</span></a>
+        <a href="{{ url_for('admincalender') }}"><i class="fas fa-calendar-check"></i><span
+                class="menu-text">Calender</span></a>
+        <a href="{{ url_for('list_group') }}"><i class="fas fa-users"></i> <span class="menu-text">Groups</span></a>
+        <a href="{{ url_for('attendance_list') }}"><i class="fas fa-list"></i> <span
+                class="menu-text">Attendance</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span
+                class="menu-text">Logout</span></a>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main" class="content">
+
+        <div class="jumbotron">
+            <h2 style="text-align: center;">Task List</h2>
+
+            <div class="form-container">
+                <button class="admin-tasks-button" onclick="window.location.href='{{ url_for('admin_tasks') }}'">Assign
+                    Task</button>
+                <form class="search-bar" action="{{ url_for('admintasklist') }}" method="GET">
+                    <input type="text" name="search_query" placeholder="Search by status..." value="{{ search_query }}">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="task-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cust.</th>
+                            <th>Project</th>
+                            <th>Assign Date</th>
+                            <th>Team</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task_data in tasks %}
+                        <tr>
+                            <td>
+                                {% if task_data.task.created_by == 'admin' %}
+    <img src="{{ url_for('static', filename='profile_pics/admindefault.png') }}" alt="Profile Picture" class="profile-pic">
+{% else %}
+    {% if task_data.employee.profile_picture %}
+        <img src="{{ url_for('static', filename='profile_pics/' ~ task_data.employee.profile_picture) }}" alt="Profile Picture" class="profile-pic">
+    {% else %}
+        <img src="{{ url_for('static', filename='profile_pics/default.png') }}" alt="Profile Picture" class="profile-pic">
+    {% endif %}
+{% endif %}
+
+                            </td>
+                            <td>
+                                <div class="project-details">
+                                    <span class="project-title">{{ task_data.task.title }}</span>
+                                    <span class="project-assigned">Assigned to {{ task_data.employee.name }}</span>
+                                </div>
+                            </td>
+                            <td>{{ task_data.task.startdate.strftime('%d-%m-%Y') }} /
+                                {{task_data.task.enddate.strftime('%d-%m-%Y') }}</td>
+
+                            <td>
+                                <div class="team">
+                                    {% for assignee in task_data.assignees %}
+                                    {% if assignee.profile_picture %}
+                                    <img src="{{ url_for('static', filename='profile_pics/' ~ assignee.profile_picture) }}"
+                                        alt="Assignee Picture" class="team-pic">
+                                    {% else %}
+                                    <img src="{{ url_for('static', filename='profile_pics/default.png') }}"
+                                        alt="Assignee Picture" class="team-pic">
+                                    {% endif %}
+                                    {% endfor %}
+
+
+                                    <span class="team-count">+{{ task_data.assignees|length }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="status-bar">
+                                    <div class="status"
+                                        style="width: {{ task_data.task.status }}; background-color: {{ task_data.task.status_color }}">
+                                    </div>
+                                    <span class="status-text">{{ task_data.task.status }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admintaskdetails', task_id=task_data.task.id) }}"
+                                    style="color: rgb(0, 0, 0); margin: 0 10px;">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('admin_update_task', task_id=task_data.task.id) }}">
+                                    <i class="bx bx-edit edit-icon"></i>
+                                </a>
+                                <form action="{{ url_for('admin_delete_task', task_id=task_data.task.id) }}"
+                                    method="POST" style="display:inline;">
+                                    <button type="submit" style="background:none;border:none; align-items: center;">
+                                        <i class="bx bx-trash delete-icon"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+
+
+        function toggleSummary() {
+            var summaryDiv = document.getElementById("summary_div");
+            summaryDiv.style.display = summaryDiv.style.display === "none" ? "block" : "none";
+        }
+
+
+
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

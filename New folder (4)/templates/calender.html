@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Calendar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usercalender.css') }}">
+</head>
+
+<body>
+    <div class="calendar-container">
+        <div class="sidebar">
+            <div class="button-container">
+                <button id="addEventBtn" class="create-btn">Add Event</button>
+            </div>
+            <div class="calendar">
+                <div class="month">June 2024</div>
+                <div class="days">
+                    <div>Su</div>
+                    <div>Mo</div>
+                    <div>Tu</div>
+                    <div>We</div>
+                    <div>Th</div>
+                    <div>Fr</div>
+                    <div>Sa</div>
+                </div>
+                <div class="dates">
+                    <!-- Dates for June 2024 (1st to 30th) -->
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div id="date1">1</div>
+                    <div id="date2">2</div>
+                    <div id="date3">3</div>
+                    <div id="date4">4</div>
+                    <div id="date5">5</div>
+                    <div id="date6">6</div>
+                    <div id="date7">7</div>
+                    <div id="date8">8</div>
+                    <div id="date9">9</div>
+                    <div id="date10">10</div>
+                    <div id="date11">11</div>
+                    <div id="date12">12</div>
+                    <div id="date13">13</div>
+                    <div id="date14">14</div>
+                    <div id="date15">15</div>
+                    <div id="date16">16</div>
+                    <div id="date17">17</div>
+                    <div id="date18">18</div>
+                    <div id="date19">19</div>
+                    <div id="date20">20</div>
+                    <div id="date21">21</div>
+                    <div id="date22">22</div>
+                    <div id="date23">23</div>
+                    <div id="date24">24</div>
+                    <div id="date25">25</div>
+                    <div id="date26">26</div>
+                    <div id="date27">27</div>
+                    <div id="date28">28</div>
+                    <div id="date29">29</div>
+                    <div id="date30">30</div>
+                </div>
+            </div>
+            <div class="upcoming-events">
+                <h3>Upcoming Events</h3>
+                <ul id="upcomingEventsList">
+                    <!-- Today's events will be inserted here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+        <div class="main-calendar">
+            <div class="calendar-header">
+                <div class="month-year">
+                    <span class="month">June</span>
+                    <span class="year">2024</span>
+                </div>
+                <div class="view-options">
+                    <button>Month</button>
+                    <button>Week</button>
+                    <button>Day</button>
+                    <button>List</button>
+                </div>
+            </div>
+            <div class="calendar-grid">
+                <!-- Days of the week -->
+                <div class="day-name">Sunday</div>
+                <div class="day-name">Monday</div>
+                <div class="day-name">Tuesday</div>
+                <div class="day-name">Wednesday</div>
+                <div class="day-name">Thursday</div>
+                <div class="day-name">Friday</div>
+                <div class="day-name">Saturday</div>
+                <!-- Days and events (Django template) -->
+                {% for day in range(1, 32) %}
+                <div class="day">
+                    <strong>{{ day }}</strong>
+                    {% for event in events if event.date.day == day %}
+                    <div class="event-detail" data-event-date="{{ event.date }}" data-event-title="{{ event.title }}"
+                        data-event-user="{{ event.employee.username }}">
+                        {{ event.title }} (User: {{ event.employee.username }})
+                        <a href="/delete_event/{{ event.id }}">Delete</a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="addEventModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="/add_event" method="post">
+                <label for="title">Event Title:</label>
+                <input type="text" id="title" name="title" required>
+                <label for="date">Date (YYYY-MM-DD):</label>
+                <input type="date" id="date" name="date" required>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("addEventModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("addEventBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Highlight today's date
+        function highlightToday() {
+            const today = new Date();
+            const currentMonth = today.getMonth(); // January is 0, June is 5
+            const currentYear = today.getFullYear();
+            const currentDate = today.getDate();
+
+            // Assuming the calendar displays June 2024
+            if (currentMonth === 5 && currentYear === 2024) {
+                const todayElement = document.getElementById('date' + currentDate);
+                if (todayElement) {
+                    todayElement.classList.add('today');
+                }
+            }
+        }
+
+        // Display today's events in the Upcoming Events list
+        function displayTodaysEvents() {
+            const today = new Date();
+            const currentMonth = today.getMonth() + 1; // Months are zero-based
+            const currentYear = today.getFullYear();
+            const currentDate = today.getDate();
+            const todayStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}`;
+
+            const events = document.querySelectorAll('.event-detail');
+            const upcomingEventsList = document.getElementById('upcomingEventsList');
+            events.forEach(event => {
+                if (event.dataset.eventDate === todayStr) {
+                    const li = document.createElement('li');
+                    li.textContent = `${event.dataset.eventTitle} (User: ${event.dataset.eventUser})`;
+                    upcomingEventsList.appendChild(li);
+                }
+            });
+        }
+
+        highlightToday();
+        displayTodaysEvents();
+    </script>
+</body>
+
+</html>

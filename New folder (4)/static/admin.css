@@ -1,0 +1,325 @@
+/* Import Google font - Poppins */
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: width 0.5s; /* Ensure width transition is smooth */
+    padding-top: 0;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 270px; /* Match initial sidebar width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.dashboard-card {
+    width: 140px;
+    padding: 20px;
+    border: 3px solid #070c2c;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+    background-color:  #cde1f7;
+    text-align: center;
+    margin: 10px;
+    height: 90px;
+}
+
+.dashboard-card h2 {
+    margin-top: 0;
+}
+
+.dashboard-card button {
+    background-color: #000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.dashboard-card button:hover {
+    background-color: #333;
+}
+
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.active-emp {
+    
+    padding-top: 20px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    
+}
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 15px rgba(64, 64, 64, 0.15);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    background: aliceblue;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    color: #0b0b33;
+}
+
+th {
+    background-color: #7ea2fd;
+    color: #0e2142;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+}
+
+tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:last-of-type {
+    border-bottom: 5px solid #0b0b33;
+}
+
+tr.active td {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+img {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.tasks-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.task-column {
+    background: #cde1f7;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 8px 10px rgba(255, 255, 255, 0.1);
+    border: 3px solid #070c2c;
+    text-align: center;
+}
+
+.task-column h3 {
+    margin-bottom: 10px;
+}
+
+.task-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border: 3px solid #070c2c;
+}
+
+.task-card img.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.task-info {
+    flex-grow: 1;
+}
+
+.task-info p {
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .content {
+        width: calc(100% - 70px);
+        margin-left: 70px;
+    }
+    .sidebar.close + .content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+}
+
+@media (max-width: 800px) {
+    .sidebar {
+        width: 70px;
+    }
+    .content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+    .sidebar.close + .content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+    .dashboard-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .dashboard-card {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 500px) {
+    .dashboard-card {
+        width: 100%;
+    }
+    .navbar {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}

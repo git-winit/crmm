@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='employee_list.css') }}">
+    <style>
+        .candidate-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .candidate-list-box {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .candidate-list-box:hover {
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .candidate-list-box .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .candidate-list-box .candidate-list-images img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .candidate-list-content {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .candidate-list-content h5 a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .candidate-list-content p,
+        .candidate-list-content ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .candidate-list-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .candidate-list-content ul li {
+            margin-bottom: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            /* Centers the buttons horizontally */
+            gap: 0.5rem;
+            /* Space between buttons */
+            margin-top: 1rem;
+        }
+
+        .custom-button {
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Centers the content within the button */
+        }
+
+        .view-button {
+            background-color: #007bff;
+        }
+
+        .update-button {
+            background-color: #28a745;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .primary-link {
+            font-size: 1.2rem;
+        }
+
+        .slide-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .slide-page.active {
+            display: block;
+        }
+
+        .close-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('admin') }}"><i class="fas fa-tachometer-alt"></i> <span
+                class="menu-text">Dashboard</span></a>
+        <a href="{{ url_for('admintasklist') }}"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="{{ url_for('employee_list') }}"><i class="fas fa-user"></i> <span class="menu-text">Employee</span></a>
+        <a href="{{ url_for('admincalender') }}"><i class="fas fa-calendar-check"></i><span
+                class="menu-text">Calender</span></a>
+        <a href="{{ url_for('list_group') }}"><i class="fas fa-users"></i> <span class="menu-text">Groups</span></a>
+        <a href="{{ url_for('attendance_list') }}"><i class="fas fa-list"></i> <span
+                class="menu-text">Attendance</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span
+                class="menu-text">Logout</span></a>
+    </div>
+    <!-- Main Content -->
+    <div id="main" class="content">
+        
+        <div class="jumbotron">
+            <h2 style="color: #061628; text-align: center;">Employees</h2>
+            <div class="form-container">
+                <form class="search-bar" action="{{ url_for('employee_list') }}" method="GET">
+                    <input type="text" name="search_query" placeholder="Search by username..."
+                        value="{{ search_query }}">
+                    <button type="submit">Search</button>
+                </form>
+                <button class="add-employee-button" onclick="openSlidePage('addEmployeeSlidePage')">
+                    <i class="fas fa-plus"></i> Add Employee
+                </button>
+            </div>
+
+            <div class="candidate-list">
+                {% for employee in employees %}
+                <div class="candidate-list-box card">
+                    <div class="card-body">
+                        <div class="candidate-list-images">
+                            <a href="#">
+                                {% if employee.profile_picture %}
+                                <img src="{{ url_for('static', filename='profile_pics/' ~ employee.profile_picture) }}"
+                                    alt="" class="avatar-md img-thumbnail rounded-circle" />
+                                {% else %}
+                                <img src="{{ url_for('static', filename='profile_pics/default.png') }}" alt=""
+                                    class="avatar-md img-thumbnail rounded-circle" />
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="candidate-list-content">
+                            <h5 class="fs-19 mb-0">
+                                <a class="primary-link" href="#"><strong>{{ employee.name }}</strong></a>
+                            </h5>
+                            <p class="text-muted mb-2">{{ employee.position }}</p>
+                            <ul class="list-unstyled text-muted">
+                                <li><i class="mdi mdi-account-badge-horizontal-outline"></i> Employee ID: {{ employee.id
+                                    }}</li>
+                                <li><i class="mdi mdi-account-outline"></i> Username: {{ employee.username }}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <button style="background-color: #000000; height: 30px; border-radius: 10%;" ><a href="{{ url_for('view_employee', id=employee.id) }}" style="color: rgb(255, 255, 255); margin: 0 10px;">
+                            <i class="fas fa-eye"></i>
+                        </a></button>
+                        <button style="background-color: #000000; height: 30px; border-radius: 10%;"><a href="{{ url_for('update_employee', id=employee.id) }}" style="color: rgb(255, 255, 255); margin: 0 10px; ">
+                            <i class="fas fa-edit"></i>
+                        </a></button>
+                        
+                    </div>
+                    
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Add Employee Slide Page -->
+    <div class="slide-page" id="addEmployeeSlidePage">
+        <button class="close-btn" onclick="closeSlidePage('addEmployeeSlidePage')">Close</button>
+        <h2>Add New Employee</h2>
+        <form method="POST" action="{{ url_for('add_employee') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="position">Position</label>
+                <input type="text" class="form-control" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <label for="joining_date">Joining Date</label>
+                <input type="date" class="form-control" id="joining_date" name="joining_date" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Employee</button>
+        </form>
+    </div>
+
+    <!-- Update Employee Slide Page -->
+    <div class="slide-page" id="updateEmployeeSlidePage"  >
+        <button class="close-btn" onclick="closeSlidePage('updateEmployeeSlidePage')">Close</button>
+        <iframe id="updateEmployeeIframe"
+            style="width: 100%; height: 100%; border: none; overflow: hidden; box-shadow: inset;"></iframe>
+    </div>
+
+    <script>
+        function openSlidePage(slidePageId) {
+            document.getElementById(slidePageId).classList.add('active');
+        }
+
+        function closeSlidePage(slidePageId) {
+            document.getElementById(slidePageId).classList.remove('active');
+        }
+
+        function closeSlidePage(updateEmployeeSlidePage) {
+            document.getElementById(updateEmployeeSlidePage).classList.remove('active');
+        }
+
+        function openUpdateSlidePage(url) {
+            document.getElementById('updateEmployeeIframe').src = url;
+            openSlidePage('updateEmployeeSlidePage');
+        }
+
+        // Selecting the sidebar and buttons
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

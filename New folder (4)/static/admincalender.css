@@ -1,0 +1,300 @@
+/* Import Google font - Poppins */
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: width 0.5s; /* Ensure width transition is smooth */
+    padding-top: 0;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 270px; /* Match initial sidebar width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.profile-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: large;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.profile-popup h2 {
+    margin-top: 0;
+}
+
+.profile-popup button {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.profile-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.session-card {
+    border: 1px solid #000000;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    background-color: white;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-card p {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #000000;
+    color: #ffffff;
+}
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.day {
+    border: 1px solid #000000;
+    padding: 10px;
+    min-height: 100px;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+
+    .clock {
+        font-size: 36px;
+    }
+
+    .content {
+        margin-top: 60px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+
+    .clock {
+        font-size: 24px;
+    }
+
+    .content {
+        margin-top: 60px;
+        padding: 5px;
+    }
+}

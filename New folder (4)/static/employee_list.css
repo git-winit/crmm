@@ -1,0 +1,439 @@
+/* Import Google font - Poppins */
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: width 0.5s; /* Ensure width transition is smooth */
+    padding-top: 0;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 270px; /* Match initial sidebar width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+.jumbotron {
+    background-color:  #c3dffc;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-left: 240px;
+}
+
+.search-bar {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
+
+.search-bar button {
+    padding: 10px;
+    border: none;
+    background-color: #000;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+}
+
+.search-bar button:hover {
+    background-color: #333;
+}
+
+.add-employee-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #000;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.add-employee-button i {
+    margin-right: 8px;
+}
+
+.add-employee-button:hover {
+    background-color: #333;
+}
+
+.candidate-list {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    
+}
+
+.candidate-list-box {
+    background-color: #091034;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border: 3px solid rgb(5, 12, 41);
+    color: #060c27;
+}
+
+.candidate-list-box:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    border: 3px solid rgb(1, 50, 245);
+}
+
+.candidate-list-box .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    
+}
+
+.candidate-list-box .candidate-list-images img {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    border: 3px solid rgb(1, 50, 245);
+}
+
+.candidate-list-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.candidate-list-content h5 a {
+    text-decoration: none;
+    color: #333;
+}
+
+.candidate-list-content p,
+.candidate-list-content ul {
+    margin: 0;
+    padding: 0;
+}
+
+.candidate-list-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.candidate-list-content ul li {
+    margin-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    /* Centers the buttons horizontally */
+    gap: 0.5rem;
+    /* Space between buttons */
+    margin-top: 1rem;
+}
+
+.custom-button {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centers the content within the button */
+}
+
+
+
+.primary-link {
+    font-size: 1.2rem;
+}
+
+.slide-page {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background-color: #090f3a;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.slide-page.active {
+    display: block;
+}
+
+.close-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+
+    .content {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+
+    .content {
+        margin-top: 60px;
+    }
+}
+
+/* Sliding Page */
+.slide-page {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 50%;
+    height: 100%;
+    background-color: #051325;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease-in-out;
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.slide-page.active {
+    right: 0;
+}
+
+.slide-page .close-btn {
+    cursor: pointer;
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    float: right;
+}
+
+.slide-page form {
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-page form .form-group {
+    margin-bottom: 15px;
+}
+
+.slide-page form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.slide-page form input,
+.slide-page form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.slide-page form button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #000;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    align-self: flex-end;
+}
+
+.slide-page form button:hover {
+    background-color: #333;
+}
+
+/* Custom button styles */
+.custom-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    /* Space between buttons */
+    text-align: center;
+    text-decoration: none;
+    font-size: 11px;
+}
+
+.custom-button:hover {
+    background-color: #333;
+}
+
+/* Container for buttons to ensure centering */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ensure buttons are inline */
+.button-container .custom-button {
+    display: inline-block;
+    margin-bottom: 10px;
+    /* Space between buttons */
+}
+
+.iframe-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.iframe-close-btn:hover {
+    color: red;
+}
+
+

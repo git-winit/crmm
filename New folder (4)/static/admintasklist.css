@@ -1,0 +1,319 @@
+
+/* Import Google font - Poppins */
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: width 0.5s; /* Ensure width transition is smooth */
+    padding-top: 0;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 270px; /* Match initial sidebar width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+.jumbotron{
+    background-color: #d7e8fb;
+    border: 3px solid #070c2c;
+    border-radius: 10px;
+}
+
+.task-table {
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #d6dcfa;
+    margin-bottom: 10px;
+    
+}
+
+.task-table table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.task-table th,
+.task-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.task-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+.task-table td {
+    background-color: #fff;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.project-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-title {
+    font-weight: bold;
+}
+
+.project-assigned {
+    color: #666;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+}
+
+.team-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 5px;
+}
+
+.team-count {
+    background-color: #ddd;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: #fefefe;
+    height: 25px;
+}
+
+.status {
+    height: 100%;
+    background-color: #4caf50;
+}
+
+.status-text {
+    position: absolute;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.edit-icon,
+.delete-icon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.edit-icon {
+    color: #007bff;
+}
+
+.delete-icon {
+    color: #dc3545;
+}
+
+
+
+.search-bar input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #000000;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-left: 60px;
+    padding-right: 350px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    
+}
+
+.search-bar input[type="text"] {
+    padding: 5px;
+    margin-right: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 30px;
+}
+
+.search-bar button {
+    padding: 6px 12px;
+    background-color: #05101b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 40px;
+}
+
+.admin-tasks-button {
+    padding: 6px 12px;
+    background-color: #080839;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 130px;
+    height: 40px;
+    
+}
+
+.admin-tasks-button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .chart-container {
+        width: calc(100% - 40px);
+    }
+
+    .dashboard-card {
+        width: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .navbar p,
+    .navbar a {
+        font-size: small;
+        padding: 8px 10px;
+        line-height: 20px;
+    }
+
+    .content {
+        margin-top: 60px;
+    }
+}
+

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!-- Coding by CodingNepal || www.codingnepalweb.com -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin.css') }}">
+    <!-- Boxicons CSS -->
+    <link flex href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+
+    <div class="sidebar" id="mySidebar">
+        <div class="sidebar-header">
+            <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+            <span class="sidebar-text">DIGIFALX</span>
+            <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+        </div>
+        <a href="{{ url_for('admin') }}"><i class="fas fa-tachometer-alt"></i> <span
+                class="menu-text">Dashboard</span></a>
+        <a href="{{ url_for('admintasklist') }}"><i class="fas fa-tasks"></i> <span class="menu-text">Task</span></a>
+        <a href="{{ url_for('employee_list') }}"><i class="fas fa-user"></i> <span class="menu-text">Employee</span></a>
+        <a href="{{ url_for('admincalender') }}"><i class="fas fa-calendar-check"></i><span
+                class="menu-text">Calender</span></a>
+        <a href="{{ url_for('list_group') }}"><i class="fas fa-users"></i> <span class="menu-text">Groups</span></a>
+        <a href="{{ url_for('attendance_list') }}"><i class="fas fa-list"></i> <span
+                class="menu-text">Attendance</span></a>
+                <a href="{{ url_for('feed') }}"><i class="fas fa-bell-o"></i> <span
+                    class="menu-text">Feed</span></a>
+        <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span
+                class="menu-text">Logout</span></a>
+    </div>
+
+
+
+
+    <div id="main" class="content">
+        <h2 style="text-align: center; color: aliceblue;">Welcome, {{ username }} to DIGIFALX</h2>
+        <div class="dashboard-container">
+            <div class="dashboard-card">
+                <h2>{{ task_count_total }}</h2>
+                <p>tasks</p>
+                <a href="{{ url_for('admintasklist') }}"><button>View Task</button></a>
+            </div>
+            <div class="dashboard-card">
+                <h2>{{ groups_count }}</h2>
+                <p>Groups</p>
+                <a href="{{ url_for('list_group') }}"><button>View Group</button></a>
+            </div>
+            <div class="dashboard-card">
+                <h2>{{ employee_count }}</h2>
+                <p>Employees</p>
+                <a href="{{ url_for('employee_list') }}"><button>View Employees</button></a>
+            </div>
+            <div class="dashboard-card">
+                <h2>{{ event_count_total }}</h2>
+                <p>Events</p>
+                <a href="{{ url_for('event_list') }}"><button>View Events</button></a>
+            </div>
+            <div class="dashboard-card">
+                <h2>{{ time_entry_count_total }}</h2>
+                <p>Time Entries</p>
+                <a href="{{ url_for('attendance_list') }}"><button>View Attendance</button></a>
+            </div>
+            
+        </div>
+
+        <!-- Add this code where you want to display the list of employees -->
+        <div class="active-emp">
+            <h1>Active Employees</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Profile Picture</th>
+                        <th>Name</th>
+                        <th>Clock In</th>
+                        <th>Clock Out</th>
+                        <th>Total Hours Worked</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td>
+                            {% if employee.profile_picture %}
+                            <img src="{{ url_for('static', filename='profile_pics/' ~ employee.profile_picture) }}"
+                                alt="{{ employee.name }}" width="50" height="50">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='profile_pics/default.png') }}"
+                                alt="No Profile Picture" width="50" height="50">
+                            {% endif %}
+                        </td>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.clock_in }}</td>
+                        <td>{{ employee.clock_out }}</td>
+                        <td>
+                            {% if employee.clock_out %}
+                            {{ employee.total_hours }} hours
+                        {% else %}
+                            <span class="status-active">Active</span>
+                        {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tasks-container">
+            <div class="task-column">
+                <h3>New Start</h3>
+                {% for task in tasks if task.status == 'new start' %}
+                <div class="task-card">
+                    <img src="{{ url_for('static', filename='profile_pics/' ~ task.assigned_employee.profile_picture) }}"
+                        alt="{{ task.assigned_employee.username }}" class="profile-pic">
+                    <div class="task-info">
+                        <p><strong>Title:</strong> {{ task.title }}</p>
+                        <p><strong>Created By:</strong> {{ task.assigned_employee.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="task-column">
+                <h3>In Progress</h3>
+                {% for task in tasks if task.status == 'inprogress' %}
+                <div class="task-card">
+                    <img src="{{ url_for('static', filename='profile_pics/' ~ task.assigned_employee.profile_picture) }}"
+                        alt="{{ task.assigned_employee.username }}" class="profile-pic">
+                    <div class="task-info">
+                        <p><strong>Title:</strong> {{ task.title }}</p>
+                        <p><strong>Created By:</strong> {{ task.assigned_employee.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="task-column">
+                <h3>Completed</h3>
+                {% for task in tasks if task.status == 'complete' %}
+                <div class="task-card">
+                    <img src="{{ url_for('static', filename='profile_pics/' ~ task.assigned_employee.profile_picture) }}"
+                        alt="{{ task.assigned_employee.username }}" class="profile-pic">
+                    <div class="task-info">
+                        <p><strong>Title:</strong> {{ task.title }}</p>
+                        <p><strong>Created By:</strong> {{ task.assigned_employee.name }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script>
+        // Selecting the sidebar and buttons
+        var isLocked = false;
+
+        function toggleLock() {
+            isLocked = !isLocked;
+            document.getElementById("lockIcon").classList.toggle('fa-lock');
+            document.getElementById("lockIcon").classList.toggle('fa-unlock');
+        }
+
+        document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+            if (!isLocked) {
+                this.classList.remove('collapsed');
+                document.getElementById("main").classList.remove('sidebar-collapsed');
+            }
+        });
+
+        document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+            if (!isLocked) {
+                this.classList.add('collapsed');
+                document.getElementById("main").classList.add('sidebar-collapsed');
+            }
+        });
+
+
+        fetch('/task_status_data')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('taskStatusChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'polarArea',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            data: Object.values(data),
+                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                        }]
+                    }
+                });
+            });
+
+        // Fetch and display Total Hours Worked Bar Chart
+        fetch('/time_entry_data')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('timeEntryChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Total Hours',
+                            data: Object.values(data),
+                            backgroundColor: '#36A2EB'
+                        }]
+                    }
+                });
+            });
+
+        // Fetch and display Number of Employees per Group Bar Chart
+        fetch('/group_employee_count_data')
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('groupEmployeeChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Number of Employees',
+                            data: Object.values(data),
+                            backgroundColor: '#FF6384'
+                        }]
+                    }
+                });
+            });
+
+        // Fetch and display Employee List
+        fetch('/employee_list')
+            .then(response => response.json())
+            .then(data => {
+                const employeeList = document.getElementById('employeeList');
+                data.forEach(employee => {
+                    const li = document.createElement('li');
+                    const img = document.createElement('img');
+                    img.src = employee.profile_picture;
+                    img.alt = employee.username;
+                    img.className = 'profile-pic';
+                    li.appendChild(img);
+                    li.appendChild(document.createTextNode(' ' + employee.username));
+                    employeeList.appendChild(li);
+                });
+            });
+
+        // Fetch and display Event List
+        fetch('/event_list')
+            .then(response => response.json())
+            .then(data => {
+                const eventList = document.getElementById('eventList');
+                data.forEach(event => {
+                    const li = document.createElement('li');
+                    const title = document.createElement('div');
+                    title.textContent = event.title;
+                    const employee = document.createElement('div');
+                    const img = document.createElement('img');
+                    img.src = event.profile_picture;
+                    img.alt = event.employee_name;
+                    img.className = 'profile-pic';
+                    employee.appendChild(img);
+                    employee.appendChild(document.createTextNode(' ' + event.employee_name));
+                    li.appendChild(title);
+                    li.appendChild(employee);
+                    eventList.appendChild(li);
+                });
+            });
+
+        // Fetch and display Task List
+        fetch('/task_list')
+            .then(response => response.json())
+            .then(data => {
+                const taskList = document.getElementById('taskList');
+                data.forEach(task => {
+                    const li = document.createElement('li');
+                    const title = document.createElement('div');
+                    title.textContent = task.title;
+                    const employee = document.createElement('div');
+                    const img = document.createElement('img');
+                    img.src = task.profile_picture;
+                    img.alt = task.employee_name;
+                    img.className = 'profile-pic';
+                    employee.appendChild(img);
+                    employee.appendChild(document.createTextNode(' ' + task.employee_name));
+                    li.appendChild(title);
+                    li.appendChild(employee);
+                    taskList.appendChild(li);
+                });
+            });
+
+
+        fetch('/clocked_in_employees')
+            .then(response => response.json())
+            .then(data => {
+                const clockedInEmployeesList = document.getElementById('clockedInEmployees');
+                data.forEach(employee => {
+                    const li = document.createElement('li');
+                    li.textContent = `${employee.name} - Total Hours: ${employee.total_hours}`;
+                    clockedInEmployeesList.appendChild(li);
+                });
+            });
+
+    </script>
+</body>
+
+</html>

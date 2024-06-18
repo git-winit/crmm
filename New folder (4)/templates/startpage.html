@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to DIGIFALX</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4a4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url(/static/images/bg.png);
+        }
+        .container {
+            width: 90%; 
+            max-width: 600px;
+            background-color: rgb(0, 0, 0); 
+            padding: 20px; 
+            text-align: center;
+            color: white; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 6vw; 
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+        .btn-container {
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px; 
+            margin: 10px 20px; 
+            font-size: 18px; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: rgb(255, 255, 255); 
+            color: rgb(0, 0, 0); 
+            text-decoration: none;
+            border: 2px solid rgb(255, 255, 255);
+            transition: background-color 0.3s;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        .btn:hover {
+            background-color: #f0f0f0; 
+        }
+        .btn-label {
+            font-size: 18px; 
+            margin-bottom: 10px;
+            display: block;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        @media (max-width: 600px) {
+            .btn {
+                padding: 8px 16px;
+                font-size: 16px;
+                margin: 8px 10px;
+            }
+            h1 {
+                font-size: 8vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to DIGIFALX</h1>
+        <div class="btn-container">
+            <div>
+                <span class="btn-label">If You Are Admin, Click On Admin Login</span>
+                <button class="btn"  onclick="window.location.href='{{ url_for('admin_login') }}'">Admin Login</button>
+            </div>
+            <div>
+                <span class="btn-label">If You Are User, Click On User Login</span>
+                <button class="btn" onclick="window.location.href='{{ url_for('login') }}'">User Login</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

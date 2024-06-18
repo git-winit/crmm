@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Feed</title>
+  <style>
+  body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 0;
+    /* Adjusted to remove extra space */
+    z-index: 1000;
+
+     
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+    /* Optional: Add margin if needed */
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 290px; /* Adjusted to account for the sidebar's width */
+    width: calc(100% - 290px); /* Ensures the main content takes up the remaining width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 80px; /* Adjusted to account for the collapsed sidebar's width */
+    width: calc(100% - 80px); /* Ensures the main content takes up the remaining width */
+}
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: #333;
+}
+
+.filter-container {
+  text-align: center;
+  margin-bottom: 20px;
+  background: #bbd2f9;
+  border-radius: 10px;
+}
+
+.feed-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+.feed-entry {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  border-bottom: 3px solid #e0e0e0;
+}
+
+.feed-entry:hover {
+  border: 3px solid #007BFF;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.feed-entry .header {
+  background-color: #000000;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.feed-entry .header .profile-pic {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.feed-entry .header .profile-pic.admin {
+  border-radius: 0;
+}
+
+.feed-entry .header .username {
+  font-weight: bold;
+  color: #007BFF;
+}
+
+.feed-entry .header .timestamp {
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+}
+
+.feed-entry .content {
+  display: flex;
+  align-items: left;
+  padding: 15px;
+  flex-grow: 1;
+  background: #c7c8fa;
+}
+
+.feed-entry .content .profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+.feed-entry .content .profile-pic.admin {
+  border-radius: 0;
+}
+
+.feed-entry .content .details {
+  flex-grow: 1;
+  color: #555;
+}
+
+.feed-entry .content .details strong {
+  display: block;
+  font-weight: bold;
+  color: #333;
+}
+
+.feed-entry .profile-pics {
+  padding: 15px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+/* Hide the .profile-pics div if it is empty */
+.feed-entry .profile-pics:empty {
+  display: none;
+}
+
+.feed-entry .profile-pics img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 5px;
+  object-fit: cover;
+}
+
+.feed-entry .profile-pics img.admin {
+  border-radius: 0;
+}
+
+.feed-entry .footer {
+  padding: 10px 15px;
+  background-color: #000000;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.feed-entry .footer .heart {
+  color: red;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="sidebar" id="mySidebar">
+    <div class="sidebar-header">
+        <img src="/static/images/logo.png" alt="Logo" class="sidebar-logo">
+        <span class="sidebar-text">DIGIFALX</span>
+        <i class="fas fa-lock" id="lockIcon" onclick="toggleLock()"></i>
+    </div>
+    <a href="{{ url_for('userhome') }}"><i class="fas fa-tachometer-alt"></i> <span
+            class="menu-text">Dashboard</span></a>
+    <a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt"></i> <span
+            class="menu-text">Logout</span></a>
+</div>
+<div id="main" class="content">
+  <div class="filter-container">
+    <h1>Feed</h1>
+    <form method="GET" action="{{ url_for('feed') }}">
+      <label for="month">Filter by month:</label>
+      <select name="month" id="month">
+        {% for month in months %}
+        <option value="{{ month.value }}" {% if selected_month==month.value %}selected{% endif %}>{{ month.name }}
+        </option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+  <div class="feed-container">
+    {% for entry in feed_entries %}
+    <div class="feed-entry">
+      <div class="header">
+        {% if entry.admin %}
+        <img src="{{ url_for('static', filename='profile_pics/admindefault.png') }}" alt="Admin Profile Picture"
+          class="profile-pic admin">
+        <span class="username">{{ entry.admin.username }}</span>
+        {% else %}
+        {% if entry.employee and entry.employee.profile_picture %}
+        <img src="{{ url_for('static', filename='profile_pics/' ~ entry.employee.profile_picture) }}"
+          alt="Employee Profile Picture" class="profile-pic">
+        {% else %}
+        <img src="{{ url_for('static', filename='profile_pics/default.png') }}" alt="Default Profile Picture"
+          class="profile-pic">
+        {% endif %}
+        <span class="username">{{ entry.employee.username if entry.employee else 'Unknown' }}</span>
+        {% endif %}
+        <span class="timestamp">{{ entry.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+      </div>
+      <div class="content">
+        {% if entry.admin %}
+        
+        
+          <strong>{{ entry.action }} {{ entry.details }}</strong>
+        
+        {% else %}
+      
+        
+          <strong>{{ entry.action }} {{ entry.details }}</strong>
+        
+        {% endif %}
+      </div>
+      <div class="footer">
+        I <span class="heart">❤</span> DIGIFALX
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  var isLocked = false;
+
+function toggleLock() {
+    isLocked = !isLocked;
+    document.getElementById("lockIcon").classList.toggle('fa-lock');
+    document.getElementById("lockIcon").classList.toggle('fa-unlock');
+}
+
+document.getElementById("mySidebar").addEventListener('mouseenter', function () {
+    if (!isLocked) {
+        this.classList.remove('collapsed');
+        document.getElementById("main").classList.remove('sidebar-collapsed');
+    }
+});
+
+document.getElementById("mySidebar").addEventListener('mouseleave', function () {
+    if (!isLocked) {
+        this.classList.add('collapsed');
+        document.getElementById("main").classList.add('sidebar-collapsed');
+    }
+});
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    background-image: url(/static/images/bg.png);
+}
+
+.container {
+    display: flex;
+    width: 80%;
+    height: 90%;
+    box-shadow: #7214b1;
+}
+
+.left {
+    background-color: #000000;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left .crm-box {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #fcfcfc;
+    font-size: 8vw;
+    padding: 30px;
+    margin-bottom: 50px;
+    text-align: center;
+    border-radius: 10px;
+
+}
+
+.right {
+    background-color: rgb(222, 215, 215);
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px;
+    position: relative;
+    margin-left: auto;
+}
+
+.right::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-color: #000000;
+}
+
+.left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+}
+.crm-box {
+    font-size: 24px;
+    font-weight: bold;
+}
+.right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+}
+.login-container {
+    width: 300px;
+    text-align: center;
+}
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+.login-container input[type="text"], 
+.login-container input[type="password"], 
+.login-container input[type="email"] {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.login-container button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0048ba;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.login-container .toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.login-container .toggle-buttons a {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+}
+.login-container .toggle-buttons .login-link {
+    background-color: #e0e0e0;
+    color: black;
+}
+.login-container .toggle-buttons .signup-link {
+    background-color: #0048ba;
+}
+.login-container .forgot-password {
+    margin-top: 10px;
+    color: #0048ba;
+    text-decoration: none;
+    font-size: 14px;
+}
+.login-container .forgot-password:hover {
+    text-decoration: underline;
+}

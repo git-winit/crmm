@@ -1,0 +1,696 @@
+body {
+    margin: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-image: url(/static/images/bg.png);
+}
+
+.sidebar {
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 0;
+    /* Adjusted to remove extra space */
+    z-index: 1000;
+
+     
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    margin-top: 10px;
+    /* Optional: Add margin if needed */
+}
+
+.sidebar-logo {
+    width: 50px;
+    height: 50px;
+
+    margin-right: 20px;
+}
+
+.sidebar-text {
+    flex-grow: 1;
+}
+
+#lockIcon {
+    cursor: pointer;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: large;
+    color: rgb(255, 255, 255);
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar a.logout {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed a {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-text,
+.sidebar.collapsed .sidebar-logo {
+    display: none;
+}
+
+.sidebar.collapsed #lockIcon {
+    display: none;
+}
+
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin-left: 290px; /* Adjusted to account for the sidebar's width */
+    width: calc(100% - 290px); /* Ensures the main content takes up the remaining width */
+}
+
+#main.sidebar-collapsed {
+    margin-left: 80px; /* Adjusted to account for the collapsed sidebar's width */
+    width: calc(100% - 80px); /* Ensures the main content takes up the remaining width */
+}
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    display: block; /* This will make the logo visible */
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    margin: auto; /* This will center the logo in the collapsed sidebar */
+}
+
+/* Add this to ensure the image is centered and visible */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+
+
+.container{
+    background: #98bbf8;
+}
+
+button {
+    background-color: #000000;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+   
+}
+
+.task-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    
+}
+
+.task-column {
+    flex: 1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f1f1f1;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+img {
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.task-title {
+    font-weight: bold;
+}
+
+.assigned-to, .status, .task-date, .task-team, .observer {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.status {
+    text-transform: capitalize;
+}
+
+.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.observer {
+    display: flex;
+    align-items: center;
+}
+
+.observer img {
+    margin-right: 5px;
+}
+.sliding-page {
+    height: 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(6, 20, 43);
+    overflow-y: hidden;
+    transition: 0.5s;
+    z-index: 1001;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.sliding-page-content {
+   
+    padding: 20px;
+    background-color: #000000;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 100%;
+    overflow-y: auto;
+    
+}
+
+.sliding-page-content form {
+    max-width: 800px;
+    background: #000000;
+    margin: 0 auto;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.sliding-page-content label {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.sliding-page-content input[type="text"],
+.sliding-page-content input[type="date"],
+.sliding-page-content textarea,
+.sliding-page-content select {
+    width: 100%;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.sliding-page-content select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 50%;
+    padding-right: 30px;
+}
+
+.sliding-page-content textarea {
+    resize: vertical;
+}
+
+.sliding-page-content button[type="submit"] {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.sliding-page-content button[type="submit"]:hover {
+    background-color: #9c9c9c;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
+}
+
+.dropdown-container {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.dropdown-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.dropdown-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #000000;
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-list.show {
+    display: block;
+}
+
+.dropdown-search {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+.dropdown-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-list li {
+    margin-bottom: 10px;
+}
+
+.profile-p {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-button {
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    transition: 0.3s;
+}
+
+.profile-button:hover {
+    background-color: #081634;
+}
+
+.profile-container {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 5px;
+    width: 450px;
+    
+    z-index: 1000;
+}
+
+.profile-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 20px;
+    height: 80%;
+    width: 60%;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.top-rectangle {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+}
+
+.branding {
+    display: inline-block;
+}
+
+.closebtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #050a32;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 30px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    border: 4px solid #ffffff;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0%;
+    
+}
+
+.profile-buttons {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-picture-container:hover .profile-buttons {
+    display: flex;
+}
+
+.edit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.info-column {
+    text-align: center;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.info-column h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.info-column p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.bottom-rectangle {
+    background-color: #03162a;
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.update-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.update-btn:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .profile-button {
+        width: 40px;
+        height: 40px;
+        font-size: x-small;
+    }
+
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar a .menu-text {
+        display: none;
+    }
+
+    #main {
+        margin-left: 60px;
+    }
+}
+
+
+
+
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.dropdown-button {
+    float: left;
+    width: 50%;
+    background: whitesmoke;
+    padding: 10px 12px;
+    cursor: pointer;
+    
+    box-sizing: border-box;
+}
+
+.dropdown-label,
+.dropdown-quantity {
+    float: left;
+}
+
+.dropdown-quantity {
+    margin-left: 4px;
+}
+
+.fa-filter {
+    float: right;
+}
+
+
+
+.dropdown-list.visible {
+    display: block;
+}
+
+.dropdown-list input[type="search"] {
+    padding: 5px 0;
+}
+
+.dropdown-list input[type="checkbox"] {
+    position: left;
+    top: 2px;
+}
+
+
+.btn-dark {
+    width: 100%;
+}
+
+.task-card {
+    font-weight: bold;
+    /* Makes all the text bold */
+}
+
+.task-card .card-title {
+    font-size: 2.5 rem;
+    /* Increases the size of the task title */
+}
+
+.dropdown {
+    position: fixed;
+    top: 100px;
+    right: 18px;
+
+
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+
+    min-width: 190px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 400px;
+    border-radius: 5px;
+}
+
+.dropdown-content form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: center;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    
+}
+
+#stopwatch {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.button-pair {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.button-pair form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.button-pair button {
+    width: 100%;
+}
+
+#dash-pic{
+    border-radius: 10px;
+    box-shadow: #007bff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
